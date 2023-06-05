@@ -218,11 +218,11 @@ public class Main {
 
         while (true) {
             for (int i = 0; i < data.size(); i++) {
-                probability = rand.nextInt(1, 101) <= prob;
                 buf = (String) data.get(i).get(5);
                 buf2 = buf.split("\\ ");
                 buf = buf2[0];
                 prob = Integer.parseInt(buf);
+                probability = rand.nextInt(1, 101) <= prob;
                 if (probability == true) {
                     rafPosArLi.add(data.get(i));
 //                    System.out.println(rafPosArLi);
