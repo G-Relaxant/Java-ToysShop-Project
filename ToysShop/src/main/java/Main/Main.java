@@ -254,10 +254,10 @@ public class Main {
             String[] buf2 = buf.split("\\ ");
             String winsToy = "";
             if (buf2[0].equalsIgnoreCase("")) {
-                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0) // Если id позиции 10 или больше, то выдаёт ошибку: Array index out of range: 1, почему не знаю
+                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0)
                         + ". " + buf2[1] + " " + (String) data.get(0).get(2);
             } else {
-                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0) // Если id позиции 10 или больше, то выдаёт ошибку: Array index out of range: 1, почему не знаю
+                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0)
                         + ". " + buf2[0] + " " + (String) data.get(0).get(2);
             }
 
