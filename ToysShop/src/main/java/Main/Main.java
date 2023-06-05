@@ -1,13 +1,14 @@
 package Main;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         List<ArrayList> toysArLi = new ArrayList<>();
-
+        List<ArrayList> winRaffleToy = new ArrayList<>();
         firstFillCatalog(toysArLi);
 
         System.out.println();
@@ -47,11 +48,16 @@ public class Main {
             } else if (get == 5) {
                 changePosition(toysArLi);
             } else if (get == 6) {
-                System.out.println("Для удаления позиции, выберите в основном меню пункт 5, выберите нужную позицию, и при вводе новых данных, нажимайте Enter, ничего не вводя");
+                deletePosition(toysArLi);
+            } else if (get == 7) {
+                winRaffleToy = rafflePosition(toysArLi);
+                System.out.println("Выиграна позиция");
+                System.out.println(winRaffleToy.get(0));
+            } else if (get == 8) {
+                giveOutWin(winRaffleToy);
             } else {
                 System.out.println("Некорректный ввод");
             }
-
         }
     }
 
@@ -65,17 +71,18 @@ public class Main {
 
     private static void firstFillCatalog(List<ArrayList> data) {    // StringList
         System.out.println();
-        String lt1 = " Зайчик     #маленький #400   #30  шт#4 %";
-        String lt2 = " Зайчик     #средний   #1000  #15  шт#3 %";
-        String lt3 = " Зайчик     #большой   #3000  #5   шт#1 %";
-        String lt4 = " Жирафик    #средний   #1500  #20  шт#2 %";
-        String lt5 = " Дельфин    #большой   #5000  #3   шт#1 %";
-        String lt6 = " Бегемотик  #маленький #500   #35  шт#5 %";
-        String lt7 = " Бегемотик  #средний   #1300  #10  шт#3 %";
-        String lt8 = " Рыбка      #маленький #400   #30  шт#4 %";
-        String lt9 = " Рыбка      #средний   #1000  #15  шт#2 %";
-        String lt10 = "Птичка     #средний   #1500  #20  шт#3 %";
-        String[] ltStrArr = {lt1, lt2, lt3, lt4, lt5, lt6, lt7, lt8, lt9, lt10};
+        String lt1 = " Зайчик     #маленький #400   #30  шт#10 %";
+        String lt2 = " Зайчик     #средний   #1000  #15  шт#6 %";
+        String lt3 = " Зайчик     #большой   #3000  #5   шт#2 %";
+        String lt4 = " Жирафик    #средний   #1500  #20  шт#4 %";
+        String lt5 = " Дельфин    #большой   #5000  #3   шт#2 %";
+        String lt6 = " Бегемотик  #маленький #500   #35  шт#15 %";
+        String lt7 = " Бегемотик  #средний   #1300  #10  шт#6 %";
+        String lt8 = " Рыбка      #маленький #400   #30  шт#10 %";
+        String lt9 = " Рыбка      #средний   #1000  #15  шт#4 %";
+        String lt10 = "Птичка     #средний   #1500  #20  шт#6 %";
+        String lt11 = "Дракончик  #большой   #5555  #1   шт#1 %";
+        String[] ltStrArr = {lt1, lt2, lt3, lt4, lt5, lt6, lt7, lt8, lt9, lt10, lt11};
 
         for (int i = 0; i < ltStrArr.length; i++) {
             String buffer = Integer.toString(i + 1);
@@ -132,8 +139,8 @@ public class Main {
 
         for (int i = 0; i < data.size(); i++) {
             String compare = (String) data.get(i).get(get2);
-            compare = compare.replaceAll("\\s", "");
-            read = read.replaceAll("\\s", "");
+            compare = compare.replaceAll("\s", "");
+            read = read.replaceAll("\s", "");
             if (compare.equalsIgnoreCase(read)) {
                 System.out.println(data.get(i));
             }
@@ -174,5 +181,93 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         String rslt = sc.nextLine();
         return rslt;
+    }
+
+    private static void deletePosition(List<ArrayList> data) {
+        System.out.print("Введите номер позиции: ");
+        String read = scan();
+        Integer selPos = 0;
+        for (int i = 0; i < data.size(); i++) {
+            String compare = (String) data.get(i).get(0);
+            if (compare.equalsIgnoreCase(read)) {
+                selPos = i;
+                break;
+            }
+        }
+        String delStr = "";
+        data.get(selPos).set(1, delStr);
+        data.get(selPos).set(2, delStr);
+        data.get(selPos).set(3, delStr);
+        data.get(selPos).set(4, delStr);
+        data.get(selPos).set(5, delStr);
+        System.out.println();
+        System.out.println("Позиция удалена. При добавлении новых позиций, желательно сначала заполнять удалённые ячейки, которые на данный момент пусты");
+    }
+
+    private static List rafflePosition(List<ArrayList> data) {
+        SplittableRandom rand = new SplittableRandom();
+//        for (int i = 0; i < 100; i++) {
+//            boolean probability = random.nextInt(1, 101) <= 99;     // вероятность prob == true = 99 %
+//            System.out.println(probability);
+//        }
+        int prob = 0;
+        String buf = "";
+        String[] buf2 = {};
+        boolean probability = rand.nextInt(1, 101) <= prob;
+        List<ArrayList> rafPosArLi = new ArrayList<>();
+
+        while (true) {
+            for (int i = 0; i < data.size(); i++) {
+                probability = rand.nextInt(1, 101) <= prob;
+                buf = (String) data.get(i).get(5);
+                buf2 = buf.split("\\ ");
+                buf = buf2[0];
+                prob = Integer.parseInt(buf);
+                if (probability == true) {
+                    rafPosArLi.add(data.get(i));
+//                    System.out.println(rafPosArLi);
+                }
+            }
+//            System.out.println();
+
+            if (rafPosArLi.size() == 0) {
+                continue;
+            } else if (rafPosArLi.size() == 1) {
+                break;
+            } else {
+                int winPos = rand.nextInt(0, rafPosArLi.size());
+                List<ArrayList> rafPosBuf = new ArrayList<>();
+//                rafPosBuf = rafPosArLi.get(winPos); // тоже самое, если нужен 1 вложенный объект
+                rafPosBuf.add(rafPosArLi.get(winPos));
+                rafPosArLi = rafPosBuf;
+                break;
+            }
+        }
+        System.out.println();
+        return rafPosArLi;
+    }
+
+    private static void giveOutWin(List<ArrayList> data) {
+        Path path = Paths.get("/home/Danya/Рабочий стол/Java-ToysShop-Project/ToysShop/src/main/resources/files/winsToyForGiveOut.txt");
+        try {
+            String buf = (String) data.get(0).get(1);
+            String[] buf2 = buf.split("\\ ");
+            String winsToy = "";
+            if (buf2[0].equalsIgnoreCase("")) {
+                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0) // Если id позиции 10 или больше, то выдаёт ошибку: Array index out of range: 1, почему не знаю
+                        + ". " + buf2[1] + " " + (String) data.get(0).get(2);
+            } else {
+                winsToy = "Выигрыш: ID позиции - " + (String) data.get(0).get(0) // Если id позиции 10 или больше, то выдаёт ошибку: Array index out of range: 1, почему не знаю
+                        + ". " + buf2[0] + " " + (String) data.get(0).get(2);
+            }
+
+            byte[] bs = winsToy.getBytes();
+            Path writtenFilePath = Files.write(path, bs);
+            System.out.println();
+            System.out.println("Выйгрыш записан в файл: /ToysShop/src/main/resources/files/winsToyForGiveOut.txt");
+            System.out.println(new String(Files.readAllBytes(writtenFilePath)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
